@@ -1,0 +1,29 @@
+# Arna demo — 2026-11-19T10:51:52.128Z — RPC http://127.0.0.1:8899
+Программа: BNmuXFFwkmzKLkxb96QvfSr642gVrMXWDTprTVDg2EhJ
+Мама (владелец): Gyo2N7wXVmE7CXG42SDuQDLA4PtT5dHtam6m6ZDz354Q
+Дана (распорядитель): 3mm5UDK7aKjVUSeBWWAYckiuD6khNd84dpd8vEmxw33a
+Тестовый тенге: 6n3RpS5KbBUnfBatqXRLR5pRxvGWaw1fmrWustWqnMBJ (у Мамы 200 000 ₸)
+✓ create_wallet «Стипендия Даны»
+    tx 3WEMFNQh4o6ANofDCUoQneoqi2mVEi9Lh1U7Fvm5W2ZnefTBoSyhi98e3mMgEz63hvb4BFt1Uuhj1AT4rygJ3Xek
+    кошелёк 8t3kR7cEAjqrh3Fv6HWgyQjtejnoC8D3HQDfKJdzdtzw, хранилище EDd3ovTpWT94mdcP7ChEVjdexJuFXohK4CQg9qEpx7x8
+✓ add_category «Еда» 30 000 ₸ в неделю
+    tx 28hbunQup2rFTEUJKmCgGAR14R5Nn43GP4TFxCL1RXArHNmURxn6fsKB6iqZrCRLHEWNsJ8xYHWxAisAkSiaMArZ
+✓ add_category «Учёба» 50 000 ₸ на всё время
+    tx 2Wg28ChmMiH6HsQy8vHkGaQUi1Qa1s3MAWUxu2jj9zjEhKSrgQL1b4auZ8Bn9TverYFwzJHMnZjXizjAXJ892FN6
+✓ add_merchant Столовая → Еда
+    tx 5hKk5L3fxCDpExWNrt5M5VJQgnpjUWoYojBd3HPBpq8aLxRxejufwtGRYUWs9rpvFGN4g5cJLy2nstzEL7a3uLoC
+✓ add_merchant Книжный → Учёба
+    tx 2jfW8x2GgPiK9RBnpiVLc8imhedoYrzrMB2pjGUXFBmfvyhCZU9XEj2Z1P7T5ser3YSogh2TQgqCVjSCAYubzbBu
+✓ deposit 100 000 ₸
+    tx 4YYUVf2mfHGnLxGkqqvRWSDfhyRfc1o97hjf7mNNqFc4o4zckEqyNtzxYzj5Go6e2iyW7ebpUMxsgVFcBD96j8KR
+✓ spend 2 450 ₸ → Столовая «Обеды, пн–ср»
+    tx 5wPQ9uTgXJv39rVxDgmqwd71uxLpcEAUFGMASB2KBkDnY4ijrgXEtpbQoiNmxqXeJdRf6apWUdPB9Ek4e6RCvqGi
+✓ spend 4 800 ₸ → Книжный «Учебник»
+    tx 392xjUkMCqJ6RqhrvmSrG2atbTooh2QCPTtT7sW8S2AT1zUVwUCrYeNvpMMA1gVoXe9F9SrHfnRg2d4Bfe51BRQf
+✓ spend 3 000 ₸ → Игровой клуб (нет в списке): отклонено программой (AccountNotInitialized)
+✓ spend 28 000 ₸ → Столовая (лимит Еды 30 000): отклонено программой (LimitExceeded)
+✓ spend Книжный из конверта «Еда» (подмена): отклонено программой (ConstraintSeeds)
+
+Итог: пополнено 100 000 ₸, потрачено 7 250 ₸, остаток 92 750 ₸, чеков 2
+Проверка: потрачено + остаток = пополнено → сходится
+Отчёт в веб-приложении: http://localhost:5173/#/w/8t3kR7cEAjqrh3Fv6HWgyQjtejnoC8D3HQDfKJdzdtzw

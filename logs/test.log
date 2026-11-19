@@ -1,0 +1,45 @@
+    Finished `release` profile [optimized] target(s) in 0.19s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s
+     Running unittests src/lib.rs (/home/claude/work/arna/target/debug/deps/arna-c8fa057628912162)
+Deploying cluster: http://127.0.0.1:8899
+Upgrade authority: /root/.config/solana/id.json
+Deploying program "arna"...
+Program path: /home/claude/work/arna/target/deploy/arna.so...
+Program ID: BNmuXFFwkmzKLkxb96QvfSr642gVrMXWDTprTVDg2EhJ
+Deploy success
+
+Found a 'test' script in the Anchor.toml. Running it as a test suite!
+
+Running test suite: "/home/claude/work/arna/Anchor.toml"
+
+bigint: Failed to load bindings, pure JS will be used (try npm run rebuild?)
+
+
+  arna — целевой кошелёк
+    ✔ создаёт кошелёк и хранилище, принадлежащее PDA (454ms)
+    ✔ не даёт создать кошелёк с пустым названием
+    ✔ владелец добавляет конверты с лимитами (855ms)
+    ✔ чужой не может добавить конверт
+    ✔ отклоняет слишком короткий период лимита
+    ✔ владелец добавляет разрешённых получателей (875ms)
+    ✔ пополнить может кто угодно: и владелец, и спонсор (837ms)
+    ✔ распорядитель платит разрешённому получателю — и появляется чек (447ms)
+    ✔ чужой человек не может тратить (41ms)
+    ✔ на получателя не из списка потратить нельзя
+    ✔ нельзя выйти за лимит конверта (381ms)
+    ✔ нельзя подменить конверт: получатель жёстко привязан к своему
+    ✔ без назначения платежа трата не проходит
+    ✔ на паузе траты запрещены, после снятия — снова можно (1253ms)
+    ✔ отключённый получатель не принимает платежи (894ms)
+    ✔ владелец может поднять лимит конверта (841ms)
+    ✔ смена распорядителя: старый больше не может тратить (854ms)
+    ✔ остаток может вернуть только владелец (474ms)
+    ✔ итог сходится: пополнено = потрачено + возвращено + остаток
+
+
+  19 passing (11s)
+
+test state::tests::names_and_memos_are_validated ... ok
+test state::tests::no_period_never_resets ... ok
+test state::tests::resets_on_new_period_and_keeps_grid ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
