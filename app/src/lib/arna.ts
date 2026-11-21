@@ -267,11 +267,25 @@ export async function createTestToken(program: ArnaProgram, mintTo: PublicKey, a
 // ─────────────── Ошибки ───────────────
 
 const FRIENDLY: Record<string, string> = {
-  AccountNotInitialized: "Этого получателя нет в списке разрешённых",
-  ConstraintSeeds: "Получатель или категория не принадлежат этому кошельку",
-  ConstraintHasOne: "Адрес не совпадает с правилами кошелька",
-  LimitExceeded: "Превышен лимит конверта",
-  CategoryMismatch: "Получатель не относится к этому конверту",
+  AccountNotInitialized: "Бұл алушы рұқсат етілгендер тізімінде жоқ",
+  NotOwner: "Мұны тек әмиян иесі жасай алады",
+  NotSpender: "Жұмсауға тек тағайындалған жұмсаушы құқылы",
+  WalletPaused: "Әмиян тоқтатылған: шығындарға уақытша тыйым салынған",
+  MerchantInactive: "Алушыны иесі өшіріп тастаған",
+  InsufficientFunds: "Әмиянда қаражат жеткіліксіз",
+  ZeroAmount: "Сома нөлден көп болуы керек",
+  NameTooLong: "Атауы тым ұзын",
+  NameEmpty: "Атауы бос болмауы керек",
+  MemoTooLong: "Төлем мақсаты тым ұзын",
+  MemoRequired: "Төлем мақсатын көрсетіңіз",
+  TooManyCategories: "Конверттердің ең көп саны толды",
+  WrongMint: "Бұл әмиянға токен сәйкес емес",
+  Overflow: "Арифметикалық асып кету",
+  InvalidPeriod: "Лимит кезеңі 0 (қайта қосылмайды) немесе кемінде 60 секунд болуы керек",
+  ConstraintSeeds: "Алушы немесе конверт бұл әмиянға тиесілі емес",
+  ConstraintHasOne: "Мекенжай әмиян ережесіне сәйкес келмейді",
+  LimitExceeded: "Конверт лимиті асып кетті",
+  CategoryMismatch: "Алушы бұл конвертке жатпайды",
 };
 
 /** Достаём понятную причину отказа из ошибки Anchor / RPC. */
@@ -283,7 +297,7 @@ export function explainError(e: unknown): { code?: string; message: string } {
   const m = logs.join("\n").match(/Error Code: (\w+)\. Error Number: \d+\. Error Message: ([^\n]+)/);
   if (m) return { code: m[1], message: FRIENDLY[m[1]] ?? m[2].replace(/\.$/, "") };
   const msg = err?.message ?? String(e);
-  if (/User rejected/i.test(msg)) return { message: "Подпись отменена в кошельке" };
-  if (/insufficient lamports|0x1\b/i.test(msg)) return { message: "Не хватает SOL на комиссию" };
+  if (/User rejected/i.test(msg)) return { message: "Әмиянда қол қою бас тартылды" };
+  if (/insufficient lamports|0x1\b/i.test(msg)) return { message: "Комиссияға SOL жетпейді" };
   return { message: msg.length > 160 ? msg.slice(0, 160) + "…" : msg };
 }

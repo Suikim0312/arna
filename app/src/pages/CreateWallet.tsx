@@ -36,7 +36,7 @@ export default function CreateWallet() {
       await airdropIfLow(connection, me, 0.5).catch(() => null);
       const t = await createTestToken(program, me, new BN(100_000_000)); // 1 000 000 ₸
       setMint(t.mint.toBase58());
-      setMsg({ kind: "ok", text: "Тестовый токен создан, на вашем кошельке 1 000 000 ₸" });
+      setMsg({ kind: "ok", text: "Сынақ токен жасалды, әмияныңызда 1 000 000 ₸ бар" });
     } catch (e) {
       setMsg({ kind: "err", text: explainError(e).message });
     } finally {
@@ -62,49 +62,49 @@ export default function CreateWallet() {
   return (
     <div className="wrap">
       <section className="create">
-        <h1>Новый целевой кошелёк</h1>
+        <h1>Жаңа мақсатты әмиян</h1>
         <p style={{ color: "var(--ink-2)", fontSize: 18, margin: 0 }}>
-          Вы станете владельцем: будете пополнять кошелёк и задавать правила. Конверты и получателей добавите на
-          следующем шаге.
+          Сіз иесі боласыз: әмиянды толтырып, ереже белгілейсіз. Конверттер мен алушыларды келесі қадамда
+          қосасыз.
         </p>
 
         {!me ? (
           <div className="empty" style={{ marginTop: 24 }}>
-            <b>Сначала подключите кошелёк</b>
-            Phantom или Solflare в тестовой сети — кнопка вверху справа. Или посмотрите готовый пример в разделе «Демо».
+            <b>Алдымен әмиянды қосыңыз</b>
+            Сынақ желісіндегі Phantom немесе Solflare — жоғарғы оң жақтағы батырма. Немесе «Демо» бөлімінен дайын мысалды қараңыз.
           </div>
         ) : (
           <div className="sheet form">
             <label className="field">
-              <span>Название</span>
-              <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Например, «Обеды для команды»" />
-              {name && !nameOk ? <small style={{ color: "var(--deny)" }}>Слишком длинно: до 24 букв</small> : null}
+              <span>Атауы</span>
+              <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Мысалы, «Команданың түскі асы»" />
+              {name && !nameOk ? <small style={{ color: "var(--deny)" }}>Тым ұзын: 24 әріпке дейін</small> : null}
             </label>
             <label className="field">
-              <span>Кто будет тратить</span>
-              <input className="input addr" value={spender} onChange={(e) => setSpender(e.target.value)} placeholder="Адрес кошелька распорядителя" />
+              <span>Кім жұмсайды</span>
+              <input className="input addr" value={spender} onChange={(e) => setSpender(e.target.value)} placeholder="Жұмсаушының әмиян мекенжайы" />
               <small>
-                {spender && !spenderKey ? "Это не похоже на адрес Solana" : "Можно указать себя, а позже сменить."}{" "}
+                {spender && !spenderKey ? "Бұл Solana мекенжайына ұқсамайды" : "Өзіңізді көрсетуге болады, кейін ауыстырасыз."}{" "}
                 {me ? (
                   <button type="button" className="btn quiet small" onClick={() => setSpender(me.toBase58())}>
-                    Указать себя
+                    Өзімді көрсету
                   </button>
                 ) : null}
               </small>
             </label>
             <label className="field">
               <span>Токен</span>
-              <input className="input addr" value={mint} onChange={(e) => setMint(e.target.value)} placeholder="Адрес токена (mint)" />
+              <input className="input addr" value={mint} onChange={(e) => setMint(e.target.value)} placeholder="Токен мекенжайы (mint)" />
               <small>
-                {mint && !mintKey ? "Это не похоже на адрес токена" : "В тестовой сети можно выпустить свой тестовый тенге."}{" "}
+                {mint && !mintKey ? "Бұл токен мекенжайына ұқсамайды" : "Сынақ желісінде өз сынақ теңгеңізді шығаруға болады."}{" "}
                 <button type="button" className="btn quiet small" onClick={makeToken} disabled={busy}>
-                  Выпустить тестовый ₸
+                  Сынақ ₸ шығару
                 </button>
               </small>
             </label>
             {msg ? <div className={`result ${msg.kind}`}>{msg.text}</div> : null}
             <button className="btn" onClick={create} disabled={!canCreate}>
-              {busy ? "Подписываю…" : "Создать кошелёк"}
+              {busy ? "Қол қоюда…" : "Әмиян жасау"}
             </button>
           </div>
         )}

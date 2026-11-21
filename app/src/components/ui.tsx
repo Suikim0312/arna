@@ -40,9 +40,9 @@ export function Envelope({
       <div>
         <div className="env-left">{money(left)}</div>
         <div className="env-of">
-          осталось из {money(lim)}
+          {money(lim)} ішінен қалды
         </div>
-        <div className="meter" role="meter" aria-valuemin={0} aria-valuemax={lim} aria-valuenow={sp} aria-label={`Потрачено ${money(sp)} из ${money(lim)}`}>
+        <div className="meter" role="meter" aria-valuemin={0} aria-valuemax={lim} aria-valuenow={sp} aria-label={`Жұмсалды ${money(sp)} / ${money(lim)}`}>
           <i style={{ width: `${pct}%` }} />
         </div>
       </div>

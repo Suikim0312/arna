@@ -39,26 +39,26 @@ export default function Demo() {
       const donor = makeProgram(connection, keypairWallet(donorKp));
       const dana = makeProgram(connection, keypairWallet(danaKp));
 
-      log({ text: "Запрашиваю тестовые SOL на комиссии для Мамы и Даны…" });
+      log({ text: "Ана мен Дана үшін комиссияға сынақ SOL сұраудамын…" });
       await airdropIfLow(connection, donorKp.publicKey, 1);
       await airdropIfLow(connection, danaKp.publicKey, 0.5);
-      log({ text: "SOL получены", kind: "ok" });
+      log({ text: "SOL алынды", kind: "ok" });
 
       const tok = await createTestToken(donor, donorKp.publicKey, T(200_000));
-      log({ text: `Создан тестовый тенге ${short(tok.mint.toBase58())}, у Мамы 200 000 ₸`, sig: tok.sig, kind: "ok" });
+      log({ text: `Сынақ теңге жасалды ${short(tok.mint.toBase58())}, Анада 200 000 ₸ бар`, sig: tok.sig, kind: "ok" });
 
-      const cw = await createWallet(donor, { name: "Стипендия Даны", spender: danaKp.publicKey, mint: tok.mint });
-      log({ text: `Кошелёк «Стипендия Даны» создан: ${short(cw.wallet.toBase58())}`, sig: cw.sig, kind: "ok" });
+      const cw = await createWallet(donor, { name: "Дананың стипендиясы", spender: danaKp.publicKey, mint: tok.mint });
+      log({ text: `«Дананың стипендиясы» әмияны жасалды: ${short(cw.wallet.toBase58())}`, sig: cw.sig, kind: "ok" });
 
       const envs: [string, number, number][] = [
-        ["Еда", 30_000, 604_800],
-        ["Учёба", 50_000, 0],
-        ["Проезд", 8_000, 604_800],
+        ["Тамақ", 30_000, 604_800],
+        ["Оқу", 50_000, 0],
+        ["Жол жүру", 8_000, 604_800],
       ];
       for (const [name, lim, period] of envs) {
         const snap = await loadWallet(donor, cw.wallet);
         const sig = await addCategory(donor, snap, name, T(lim), period);
-        log({ text: `Конверт «${name}»: ${lim.toLocaleString("ru-RU")} ₸ ${period ? "в неделю" : "на всё время"}`, sig, kind: "ok" });
+        log({ text: `«${name}» конверті: ${lim.toLocaleString("ru-RU")} ₸ ${period ? "аптасына" : "тұтас уақытқа"}`, sig, kind: "ok" });
       }
 
       const shops: [typeof ROLES[number]["id"], number][] = [
@@ -70,20 +70,20 @@ export default function Demo() {
         const snap = await loadWallet(donor, cw.wallet);
         const r = ROLES.find((x) => x.id === role)!;
         const sig = await addMerchant(donor, snap, demoKey(role).publicKey, cat, r.title);
-        log({ text: `Разрешён получатель: ${r.title}`, sig, kind: "ok" });
+        log({ text: `Алушыға рұқсат берілді: ${r.title}`, sig, kind: "ok" });
       }
 
       let snap = await loadWallet(donor, cw.wallet);
       const dsig = await deposit(donor, snap, T(100_000));
-      log({ text: "Мама положила 100 000 ₸", sig: dsig, kind: "ok" });
+      log({ text: "Ана 100 000 ₸ салды", sig: dsig, kind: "ok" });
 
       snap = await loadWallet(dana, cw.wallet);
-      const ssig = await spend(dana, snap, demoKey("canteen").publicKey, T(2_450), "Обеды, понедельник–среда");
-      log({ text: "Дана оплатила обеды в столовой: 2 450 ₸", sig: ssig, kind: "ok" });
+      const ssig = await spend(dana, snap, demoKey("canteen").publicKey, T(2_450), "Түскі астар, дүйсенбі–сәрсенбі");
+      log({ text: "Дана асханада түскі асқа төледі: 2 450 ₸", sig: ssig, kind: "ok" });
 
       rememberDemoWallet(cw.wallet.toBase58());
       setReady(cw.wallet.toBase58());
-      log({ text: "Готово. Откройте кошелёк и попробуйте заплатить от имени Даны.", kind: "ok" });
+      log({ text: "Дайын. Әмиянды ашып, Дана атынан төлеп көріңіз.", kind: "ok" });
       bump();
     } catch (e) {
       log({ text: explainError(e).message, kind: "err" });
@@ -101,10 +101,10 @@ export default function Demo() {
   return (
     <div className="wrap">
       <section className="demo-hero">
-        <h1>Стипендия Даны</h1>
+        <h1>Дананың стипендиясы</h1>
         <p>
-          Мама отправляет дочери-студентке деньги на еду, учёбу и проезд. Дана тратит сама, но только в разрешённых
-          местах и в пределах лимитов. Всё происходит в настоящей тестовой сети {network === "devnet" ? "Devnet" : "Localnet"}.
+          Ана студент қызына тамаққа, оқуға және жол жүруге ақша жібереді. Дана өзі жұмсайды, бірақ тек рұқсат етілген
+          жерлерде және лимит шегінде. Бәрі нақты сынақ желісінде өтеді: {network === "devnet" ? "Devnet" : "Localnet"}.
         </p>
       </section>
 
@@ -119,11 +119,11 @@ export default function Demo() {
 
       <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
         <button className="btn" onClick={run} disabled={busy}>
-          {busy ? "Готовлю…" : ready ? "Подготовить заново" : "Подготовить демо"}
+          {busy ? "Дайындалуда…" : ready ? "Қайта дайындау" : "Демоны дайындау"}
         </button>
         {ready ? (
           <button className="btn ghost" onClick={open} disabled={busy}>
-            Открыть кошелёк Даны
+            Дананың әмиянын ашу
           </button>
         ) : null}
         {ready && !busy ? (
@@ -136,7 +136,7 @@ export default function Demo() {
               setDemoRole(null);
             }}
           >
-            Сбросить демо-ключи
+            Демо кілттерін тастау
           </button>
         ) : null}
       </div>

@@ -16,12 +16,12 @@ export interface Role {
 }
 
 export const ROLES: Role[] = [
-  { id: "donor", title: "Мама", hint: "владелец кошелька: кладёт деньги и задаёт правила", canSign: true },
-  { id: "spender", title: "Дана", hint: "студентка: тратит по правилам", canSign: true },
-  { id: "canteen", title: "Столовая «Дастархан»", hint: "получатель: еда", canSign: false },
-  { id: "books", title: "Книжный «Страница»", hint: "получатель: учёба", canSign: false },
-  { id: "transit", title: "Городской транспорт", hint: "получатель: проезд", canSign: false },
-  { id: "arcade", title: "Игровой клуб «Level Up»", hint: "не в списке: на него тратить нельзя", canSign: false },
+  { id: "donor", title: "Ана", hint: "әмиян иесі: ақша салады және ереже белгілейді", canSign: true },
+  { id: "spender", title: "Дана", hint: "студент: ережеге сай жұмсайды", canSign: true },
+  { id: "canteen", title: "«Дастархан» асханасы", hint: "алушы: тамақ", canSign: false },
+  { id: "books", title: "«Страница» кітап дүкені", hint: "алушы: оқу", canSign: false },
+  { id: "transit", title: "Қалалық көлік", hint: "алушы: жол жүру", canSign: false },
+  { id: "arcade", title: "«Level Up» ойын клубы", hint: "тізімде жоқ: оған жұмсауға болмайды", canSign: false },
 ];
 
 const KEY = "arna.demo.keys.v1";

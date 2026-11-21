@@ -20,25 +20,25 @@ export default function Mine() {
     try {
       go(`/w/${new PublicKey(addr.trim()).toBase58()}`);
     } catch {
-      setErr("Это не похоже на адрес кошелька");
+      setErr("Бұл әмиян мекенжайына ұқсамайды");
     }
   }
 
   return (
     <div className="wrap">
       <section className="create">
-        <h1>Мои кошельки</h1>
+        <h1>Менің әмияндарым</h1>
         {!me ? (
-          <p style={{ color: "var(--ink-2)" }}>Подключите кошелёк или выберите демо-роль, чтобы увидеть свои целевые кошельки.</p>
+          <p style={{ color: "var(--ink-2)" }}>Әмиянды қосыңыз немесе демо-рөл таңдаңыз — сонда өз мақсатты әмияндарыңызды көресіз.</p>
         ) : list === null ? (
-          <p style={{ color: "var(--ink-2)" }}>Загружаю…</p>
+          <p style={{ color: "var(--ink-2)" }}>Жүктелуде…</p>
         ) : list.length === 0 ? (
           <div className="empty">
-            <b>Пока пусто</b>
-            Создайте первый кошелёк или попросите владельца назначить вас распорядителем.
+            <b>Әзірге бос</b>
+            Алғашқы әмиянды жасаңыз немесе иесінен өзіңізді жұмсаушы етіп тағайындауын сұраңыз.
             <div style={{ marginTop: 14 }}>
               <a className="btn small" href="#/new">
-                Создать кошелёк
+                Әмиян жасау
               </a>
             </div>
           </div>
@@ -49,10 +49,10 @@ export default function Mine() {
                 <span>
                   {w.account.name}
                   <span style={{ color: "var(--ink-3)", fontWeight: 500, marginLeft: 10 }}>
-                    {w.account.owner.equals(me) ? "вы владелец" : "вы распорядитель"}
+                    {w.account.owner.equals(me) ? "иесі — сіз" : "жұмсаушы — сіз"}
                   </span>
                 </span>
-                <span>потрачено {money(w.account.totalSpent)}</span>
+                <span>жұмсалды {money(w.account.totalSpent)}</span>
               </a>
             ))}
           </div>
@@ -60,12 +60,12 @@ export default function Mine() {
 
         <div className="sheet form">
           <label className="field">
-            <span>Открыть отчёт по адресу</span>
-            <input className="input addr" value={addr} onChange={(e) => (setAddr(e.target.value), setErr(""))} placeholder="Адрес целевого кошелька" />
-            {err ? <small style={{ color: "var(--deny)" }}>{err}</small> : <small>Отчёт открывается без подключения кошелька.</small>}
+            <span>Мекенжай бойынша есепті ашу</span>
+            <input className="input addr" value={addr} onChange={(e) => (setAddr(e.target.value), setErr(""))} placeholder="Мақсатты әмиян мекенжайы" />
+            {err ? <small style={{ color: "var(--deny)" }}>{err}</small> : <small>Есеп әмиянды қоспай-ақ ашылады.</small>}
           </label>
           <button className="btn ghost" onClick={open} disabled={!addr.trim()}>
-            Открыть отчёт
+            Есепті ашу
           </button>
         </div>
       </section>

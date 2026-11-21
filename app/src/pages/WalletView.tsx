@@ -25,10 +25,10 @@ type Msg = { kind: "ok" | "err"; text: string; sig?: string } | null;
 
 const bytes = (s: string) => new TextEncoder().encode(s).length;
 const PERIODS = [
-  { v: 604_800, label: "в неделю" },
-  { v: 2_592_000, label: "в месяц" },
-  { v: 86_400, label: "в день" },
-  { v: 0, label: "на всё время" },
+  { v: 604_800, label: "аптасына" },
+  { v: 2_592_000, label: "айына" },
+  { v: 86_400, label: "күніне" },
+  { v: 0, label: "тұтас уақытқа" },
 ];
 
 function toKey(s: string) {
@@ -51,12 +51,12 @@ export default function WalletView({ address }: { address: string }) {
   const key = useMemo(() => toKey(address), [address]);
 
   const reload = useCallback(async () => {
-    if (!key) return setError("В ссылке неверный адрес кошелька");
+    if (!key) return setError("Сілтемедегі әмиян мекенжайы қате");
     try {
       setSnap(await loadWallet(program, key));
       setError(null);
     } catch {
-      setError("Кошелёк не найден в этой сети. Проверьте адрес и выбранную сеть вверху.");
+      setError("Бұл желіде әмиян табылмады. Мекенжайды және жоғарыда таңдалған желіні тексеріңіз.");
     }
   }, [program, key]);
 
@@ -74,7 +74,7 @@ export default function WalletView({ address }: { address: string }) {
     return (
       <div className="wrap">
         <div className="empty" style={{ margin: "48px 0" }}>
-          <b>Не получилось открыть кошелёк</b>
+          <b>Әмиянды ашу мүмкін болмады</b>
           {error}
         </div>
       </div>
@@ -83,7 +83,7 @@ export default function WalletView({ address }: { address: string }) {
   if (!snap) {
     return (
       <div className="wrap">
-        <p style={{ padding: "48px 0", color: "var(--ink-2)" }}>Загружаю кошелёк из блокчейна…</p>
+        <p style={{ padding: "48px 0", color: "var(--ink-2)" }}>Әмиян блокчейннен жүктелуде…</p>
       </div>
     );
   }
@@ -128,37 +128,37 @@ export default function WalletView({ address }: { address: string }) {
           <h1>{w.name}</h1>
           <div className="who">
             <span>
-              Владелец <b>{roleName(w.owner)}</b>
+              Иесі: <b>{roleName(w.owner)}</b>
             </span>
             <span>
-              Тратит <b>{roleName(w.spender)}</b>
+              Жұмсаушы: <b>{roleName(w.spender)}</b>
             </span>
             <span>
               <a href={explorerAddr(address, network)} target="_blank" rel="noreferrer">
-                Адрес в Explorer
+                Explorer-дегі мекенжай
               </a>
             </span>
             <button className="btn quiet small" onClick={share}>
-              {copied ? "Ссылка скопирована" : "Скопировать ссылку на отчёт"}
+              {copied ? "Сілтеме көшірілді" : "Есепке сілтемені көшіру"}
             </button>
           </div>
         </div>
         <div className="balance">
           <div className="big">{money(snap.vaultBalance)}</div>
           <div className="sub">
-            сейчас в кошельке
+            қазір әмиянда
             <br />
-            пополнено {money(w.totalDeposited)}, потрачено {money(w.totalSpent)}
+            толтырылды {money(w.totalDeposited)}, жұмсалды {money(w.totalSpent)}
           </div>
         </div>
       </section>
 
-      {w.paused ? <div className="paused-banner">Кошелёк на паузе: владелец временно запретил траты.</div> : null}
+      {w.paused ? <div className="paused-banner">Әмиян тоқтатылған: иесі шығындарға уақытша тыйым салды.</div> : null}
 
       <div className="layout">
         <div>
           <h2 className="section-title">
-            Конверты <span className="count">{snap.categories.length}</span>
+            Конверттер <span className="count">{snap.categories.length}</span>
           </h2>
           {snap.categories.length ? (
             <div className="envelopes">
@@ -180,13 +180,13 @@ export default function WalletView({ address }: { address: string }) {
             </div>
           ) : (
             <div className="empty">
-              <b>Конвертов пока нет</b>
-              {isOwner ? "Добавьте первый конверт в панели справа: например, «Еда» с лимитом на неделю." : "Владелец ещё не задал правила."}
+              <b>Конверттер әлі жоқ</b>
+              {isOwner ? "Оң жақ панельден алғашқы конвертті қосыңыз: мысалы, аптасына лимиті бар «Тамақ»." : "Иесі әлі ереже белгілеген жоқ."}
             </div>
           )}
 
           <h2 className="section-title">
-            Куда можно платить <span className="count">{snap.merchants.length}</span>
+            Қайда төлеуге болады <span className="count">{snap.merchants.length}</span>
           </h2>
           {snap.merchants.length ? (
             <div className="recipients">
@@ -196,14 +196,14 @@ export default function WalletView({ address }: { address: string }) {
                   <span style={{ flex: 1 }}>
                     <div className="r-name">{m.name}</div>
                     <div className="r-meta">
-                      {catName(m.category)}, получено {money(m.totalReceived)}
-                      {m.active ? "" : ". Отключён"}
+                      {catName(m.category)}, алынды {money(m.totalReceived)}
+                      {m.active ? "" : ". Өшірулі"}
                     </div>
                   </span>
                   {isOwner ? (
                     <MerchantToggle
                       active={m.active}
-                      onToggle={() => act(() => setMerchantActive(program, snap, m.recipient, !m.active), m.active ? "Получатель отключён" : "Получатель включён")}
+                      onToggle={() => act(() => setMerchantActive(program, snap, m.recipient, !m.active), m.active ? "Алушы өшірілді" : "Алушы қосылды")}
                     />
                   ) : null}
                 </div>
@@ -211,13 +211,13 @@ export default function WalletView({ address }: { address: string }) {
             </div>
           ) : (
             <div className="empty">
-              <b>Список получателей пуст</b>
-              Пока не добавлен ни один получатель, тратить нельзя никуда.
+              <b>Алушылар тізімі бос</b>
+              Бірде-бір алушы қосылмағанша, ешқайда жұмсауға болмайды.
             </div>
           )}
 
           <h2 className="section-title">
-            Чеки <span className="count">{snap.spends.length}</span>
+            Чектер <span className="count">{snap.spends.length}</span>
           </h2>
           {snap.spends.length ? (
             <div className="roll">
@@ -238,7 +238,7 @@ export default function WalletView({ address }: { address: string }) {
                       <span>{when(s.timestamp.toNumber())}</span>
                       <span>
                         <a href={explorerAddr(s.address.toBase58(), network)} target="_blank" rel="noreferrer">
-                          запись {short(s.address.toBase58())}
+                          жазба {short(s.address.toBase58())}
                         </a>
                       </span>
                     </div>
@@ -248,13 +248,13 @@ export default function WalletView({ address }: { address: string }) {
             </div>
           ) : (
             <div className="empty">
-              <b>Трат ещё не было</b>
-              Каждая оплата появится здесь чеком: кому, сколько, из какого конверта и зачем.
+              <b>Шығындар әлі болған жоқ</b>
+              Әр төлем осы жерде чек болып шығады: кімге, қанша, қай конверттен және не үшін.
             </div>
           )}
         </div>
 
-        <aside className="panel" aria-label="Действия">
+        <aside className="panel" aria-label="Әрекеттер">
           <StampOverlay stamp={stamp} />
           {isSpender ? (
             <PayForm
@@ -263,10 +263,10 @@ export default function WalletView({ address }: { address: string }) {
               onResult={(r, idx) => {
                 if (r.kind === "ok") {
                   setFreshIndex(idx);
-                  showStamp({ kind: "ok", title: "ОПЛАЧЕНО", note: "чек сохранён в блокчейне" });
-                } else showStamp({ kind: "deny", title: "ОТКЛОНЕНО", note: r.text });
+                  showStamp({ kind: "ok", title: "ТӨЛЕНДІ", note: "чек блокчейнде сақталды" });
+                } else showStamp({ kind: "deny", title: "БОЛМАЙДЫ", note: r.text });
               }}
-              pay={(recipient, amount, memo) => act(() => spend(program, snap, recipient, amount, memo), "Оплачено")}
+              pay={(recipient, amount, memo) => act(() => spend(program, snap, recipient, amount, memo), "Төленді")}
               network={network}
             />
           ) : null}
@@ -289,22 +289,22 @@ export default function WalletView({ address }: { address: string }) {
           {!isOwner && !isSpender ? (
             me ? (
               <SupportPanel
-                deposit={(a) => act(() => deposit(program, snap, a), "Спасибо! Кошелёк пополнен")}
+                deposit={(a) => act(() => deposit(program, snap, a), "Рақмет! Әмиян толтырылды")}
                 network={network}
               />
             ) : (
               <>
-                <h2>Публичный отчёт</h2>
+                <h2>Ашық есеп</h2>
                 <p className="panel-sub">
-                  Это открытая страница: все цифры читаются прямо из блокчейна, подделать их нельзя. Чтобы пополнить
-                  кошелёк или тратить, подключите кошелёк.
+                  Бұл ашық бет: барлық сандар тікелей блокчейннен оқылады, оларды қолдан жасау мүмкін емес. Әмиянды толтыру
+                  немесе жұмсау үшін әмиянды қосыңыз.
                 </p>
                 <dl style={{ margin: 0, display: "grid", gap: 10, fontSize: 15 }}>
-                  <Row k="Пополнено" v={money(w.totalDeposited)} />
-                  <Row k="Потрачено" v={money(w.totalSpent)} />
-                  <Row k="Возвращено владельцу" v={money(w.totalRefunded)} />
-                  <Row k="Остаток" v={money(snap.vaultBalance)} />
-                  <Row k="Создан" v={when(w.createdAt.toNumber())} />
+                  <Row k="Толтырылды" v={money(w.totalDeposited)} />
+                  <Row k="Жұмсалды" v={money(w.totalSpent)} />
+                  <Row k="Иесіне қайтарылды" v={money(w.totalRefunded)} />
+                  <Row k="Қалдық" v={money(snap.vaultBalance)} />
+                  <Row k="Жасалған күні" v={when(w.createdAt.toNumber())} />
                 </dl>
               </>
             )
@@ -336,7 +336,7 @@ function MerchantToggle({ active, onToggle }: { active: boolean; onToggle: () =>
         setBusy(false);
       }}
     >
-      {busy ? "…" : active ? "Отключить" : "Включить"}
+      {busy ? "…" : active ? "Өшіру" : "Қосу"}
     </button>
   );
 }
@@ -350,7 +350,7 @@ function Result({ msg, network }: { msg: Msg; network: Parameters<typeof explore
         <>
           {". "}
           <a href={explorerTx(msg.sig, network)} target="_blank" rel="noreferrer">
-            Открыть транзакцию
+            Транзакцияны ашу
           </a>
         </>
       ) : null}
@@ -406,10 +406,10 @@ function PayForm({
   return (
     <form className="form" onSubmit={submit}>
       <div>
-        <h2>Оплатить</h2>
-        <p className="panel-sub">Программа проверит получателя, лимит конверта и только потом переведёт деньги.</p>
+        <h2>Төлеу</h2>
+        <p className="panel-sub">Бағдарлама алушыны және конверт лимитін тексереді, содан кейін ғана ақшаны аударады.</p>
       </div>
-      <div className="recipients" role="radiogroup" aria-label="Получатель">
+      <div className="recipients" role="radiogroup" aria-label="Алушы">
         {snap.merchants.map((m) => (
           <button
             type="button"
@@ -429,34 +429,34 @@ function PayForm({
           <button type="button" className="recipient" aria-pressed={choice === "arcade"} onClick={() => setChoice("arcade")}>
             <span className="dot" style={{ background: "var(--ink-3)" }} />
             <span>
-              <div className="r-name">Игровой клуб «Level Up»</div>
-              <div className="r-meta">нет в списке разрешённых</div>
+              <div className="r-name">«Level Up» ойын клубы</div>
+              <div className="r-meta">рұқсат етілгендер тізімінде жоқ</div>
             </span>
           </button>
         ) : null}
         <button type="button" className="recipient" aria-pressed={choice === "other"} onClick={() => setChoice("other")}>
           <span className="dot" style={{ background: "var(--rule)" }} />
           <span>
-            <div className="r-name">Другой адрес</div>
-            <div className="r-meta">вставить вручную</div>
+            <div className="r-name">Басқа мекенжай</div>
+            <div className="r-meta">қолмен қою</div>
           </span>
         </button>
       </div>
       {choice === "other" ? (
-        <input className="input addr" value={other} onChange={(e) => setOther(e.target.value)} placeholder="Адрес получателя" aria-label="Адрес получателя" />
+        <input className="input addr" value={other} onChange={(e) => setOther(e.target.value)} placeholder="Алушы мекенжайы" aria-label="Алушы мекенжайы" />
       ) : null}
       <label className="field">
-        <span>Сумма, ₸</span>
+        <span>Сома, ₸</span>
         <input className="input amount-input" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" />
       </label>
       <label className="field">
-        <span>Назначение</span>
-        <input className="input" value={memo} onChange={(e) => setMemo(e.target.value)} placeholder="Например, «Обед в среду»" />
-        {memo && !memoOk ? <small style={{ color: "var(--deny)" }}>До 48 букв</small> : null}
+        <span>Төлем мақсаты</span>
+        <input className="input" value={memo} onChange={(e) => setMemo(e.target.value)} placeholder="Мысалы, «Сәрсенбідегі түскі ас»" />
+        {memo && !memoOk ? <small style={{ color: "var(--deny)" }}>48 әріпке дейін</small> : null}
       </label>
       <Result msg={msg} network={network} />
       <button className="btn" disabled={busy || !recipient || !units || !memoOk}>
-        {busy ? "Подписываю…" : units ? `Оплатить ${money(units)}` : "Оплатить"}
+        {busy ? "Қол қоюда…" : units ? `Төлеу ${money(units)}` : "Төлеу"}
       </button>
     </form>
   );
@@ -497,16 +497,16 @@ function OwnerPanel({
   };
 
   const tabs: [typeof tab, string][] = [
-    ["money", "Деньги"],
-    ["env", "Конверты"],
-    ["who", "Получатели"],
-    ["manage", "Управление"],
+    ["money", "Ақша"],
+    ["env", "Конверттер"],
+    ["who", "Алушылар"],
+    ["manage", "Басқару"],
   ];
 
   return (
     <div>
-      <h2>Вы владелец</h2>
-      <p className="panel-sub">Пополняйте кошелёк и меняйте правила. Распорядитель увидит изменения сразу.</p>
+      <h2>Сіз иесісіз</h2>
+      <p className="panel-sub">Әмиянды толтырыңыз және ережені өзгертіңіз. Жұмсаушы өзгерістерді бірден көреді.</p>
       <div className="tabs" role="tablist">
         {tabs.map(([id, label]) => (
           <button key={id} role="tab" aria-selected={tab === id} onClick={() => (setTab(id), setMsg(null))}>
@@ -538,22 +538,22 @@ function MoneyTab({ busy, run, actions, snap }: TabProps) {
   return (
     <div className="form">
       <label className="field">
-        <span>Сумма, ₸</span>
+        <span>Сома, ₸</span>
         <input className="input amount-input" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" />
       </label>
       <div className="row">
-        <button className="btn" disabled={busy || !units} onClick={() => units && run(() => actions.deposit(units), `Пополнено на ${money(units)}`)}>
-          Пополнить
+        <button className="btn" disabled={busy || !units} onClick={() => units && run(() => actions.deposit(units), `${money(units)} толтырылды`)}>
+          Толтыру
         </button>
         <button
           className="btn ghost"
           disabled={busy || !units || units.gt(snap.vaultBalance)}
-          onClick={() => units && run(() => actions.refund(units), `Возвращено ${money(units)}`)}
+          onClick={() => units && run(() => actions.refund(units), `${money(units)} қайтарылды`)}
         >
-          Забрать себе
+          Өзіме алу
         </button>
       </div>
-      <small style={{ color: "var(--ink-3)" }}>Пополнить может кто угодно, забрать остаток — только владелец.</small>
+      <small style={{ color: "var(--ink-3)" }}>Толтыруға кез келген адам құқылы, қалдықты тек иесі алады.</small>
     </div>
   );
 }
@@ -585,7 +585,7 @@ function EnvTab({ busy, run, actions, snap }: TabProps) {
       <label className="field">
         <span>Конверт</span>
         <select className="input" value={String(edit)} onChange={(e) => pick(e.target.value)}>
-          <option value="new">Новый конверт</option>
+          <option value="new">Жаңа конверт</option>
           {snap.categories.map((c) => (
             <option key={c.index} value={c.index}>
               {c.name}: {money(c.limit)} {periodLabel(c.period.toNumber())}
@@ -595,8 +595,8 @@ function EnvTab({ busy, run, actions, snap }: TabProps) {
       </label>
       {edit === "new" ? (
         <label className="field">
-          <span>Название</span>
-          <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Еда, Учёба, Такси…" />
+          <span>Атауы</span>
+          <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Тамақ, Оқу, Такси…" />
         </label>
       ) : null}
       <div className="row">
@@ -605,7 +605,7 @@ function EnvTab({ busy, run, actions, snap }: TabProps) {
           <input className="input" inputMode="decimal" value={limit} onChange={(e) => setLimit(e.target.value)} placeholder="30 000" />
         </label>
         <label className="field">
-          <span>Обновляется</span>
+          <span>Жаңарады</span>
           <select className="input" value={period} onChange={(e) => setPeriod(Number(e.target.value))}>
             {PERIODS.map((p) => (
               <option key={p.v} value={p.v}>
@@ -619,13 +619,13 @@ function EnvTab({ busy, run, actions, snap }: TabProps) {
         <button
           className="btn"
           disabled={busy || !units || !nameOk}
-          onClick={() => units && run(() => actions.addCategory(name.trim(), units, period), `Конверт «${name.trim()}» добавлен`)}
+          onClick={() => units && run(() => actions.addCategory(name.trim(), units, period), `«${name.trim()}» конверті қосылды`)}
         >
-          Добавить конверт
+          Конверт қосу
         </button>
       ) : (
-        <button className="btn" disabled={busy || !units} onClick={() => units && run(() => actions.updateCategory(edit, units, period), "Лимит обновлён")}>
-          Сохранить лимит
+        <button className="btn" disabled={busy || !units} onClick={() => units && run(() => actions.updateCategory(edit, units, period), "Лимит жаңартылды")}>
+          Лимитті сақтау
         </button>
       )}
     </div>
@@ -639,21 +639,21 @@ function WhoTab({ busy, run, actions, snap }: TabProps) {
   const key = toKey(addr);
   const nameOk = name.trim().length > 0 && bytes(name) <= 48;
   if (!snap.categories.length) {
-    return <p className="panel-sub">Сначала добавьте конверт: каждый получатель привязывается к одному конверту.</p>;
+    return <p className="panel-sub">Алдымен конверт қосыңыз: әр алушы бір конвертке байланады.</p>;
   }
   return (
     <div className="form">
       <label className="field">
-        <span>Название</span>
-        <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Столовая, аптека, школа…" />
+        <span>Атауы</span>
+        <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Асхана, дәріхана, мектеп…" />
       </label>
       <label className="field">
-        <span>Адрес получателя</span>
-        <input className="input addr" value={addr} onChange={(e) => setAddr(e.target.value)} placeholder="Кошелёк магазина или организации" />
-        {addr && !key ? <small style={{ color: "var(--deny)" }}>Это не похоже на адрес Solana</small> : null}
+        <span>Алушы мекенжайы</span>
+        <input className="input addr" value={addr} onChange={(e) => setAddr(e.target.value)} placeholder="Дүкеннің немесе ұйымның әмияны" />
+        {addr && !key ? <small style={{ color: "var(--deny)" }}>Бұл Solana мекенжайына ұқсамайды</small> : null}
       </label>
       <label className="field">
-        <span>Из какого конверта платить</span>
+        <span>Қай конверттен төлейді</span>
         <select className="input" value={cat} onChange={(e) => setCat(Number(e.target.value))}>
           {snap.categories.map((c) => (
             <option key={c.index} value={c.index}>
@@ -665,9 +665,9 @@ function WhoTab({ busy, run, actions, snap }: TabProps) {
       <button
         className="btn"
         disabled={busy || !key || !nameOk}
-        onClick={() => key && run(() => actions.addMerchant(key, cat, name.trim()), `${name.trim()} теперь в списке`)}
+        onClick={() => key && run(() => actions.addMerchant(key, cat, name.trim()), `${name.trim()} енді тізімде`)}
       >
-        Разрешить получателя
+        Алушыға рұқсат беру
       </button>
     </div>
   );
@@ -682,17 +682,17 @@ function ManageTab({ busy, run, actions, snap }: TabProps) {
       <button
         className={`btn ${paused ? "" : "danger"}`}
         disabled={busy}
-        onClick={() => run(() => actions.setPaused(!paused), paused ? "Траты снова разрешены" : "Кошелёк на паузе")}
+        onClick={() => run(() => actions.setPaused(!paused), paused ? "Шығындарға қайта рұқсат берілді" : "Әмиян тоқтатылды")}
       >
-        {paused ? "Снять с паузы" : "Поставить на паузу"}
+        {paused ? "Тоқтатуды алу" : "Тоқтата тұру"}
       </button>
-      <small style={{ color: "var(--ink-3)" }}>Пауза мгновенно запрещает любые траты, например если телефон распорядителя потерян.</small>
+      <small style={{ color: "var(--ink-3)" }}>Тоқтату кез келген шығынға бірден тыйым салады, мысалы жұмсаушының телефоны жоғалса.</small>
       <label className="field" style={{ marginTop: 8 }}>
-        <span>Новый распорядитель</span>
-        <input className="input addr" value={addr} onChange={(e) => setAddr(e.target.value)} placeholder="Адрес кошелька" />
+        <span>Жаңа жұмсаушы</span>
+        <input className="input addr" value={addr} onChange={(e) => setAddr(e.target.value)} placeholder="Әмиян мекенжайы" />
       </label>
-      <button className="btn ghost" disabled={busy || !key} onClick={() => key && run(() => actions.setSpender(key), "Распорядитель сменён")}>
-        Сменить распорядителя
+      <button className="btn ghost" disabled={busy || !key} onClick={() => key && run(() => actions.setSpender(key), "Жұмсаушы ауыстырылды")}>
+        Жұмсаушыны ауыстыру
       </button>
     </div>
   );
@@ -706,11 +706,11 @@ function SupportPanel({ deposit: dep, network }: { deposit: (a: NonNullable<Retu
   return (
     <div className="form">
       <div>
-        <h2>Поддержать</h2>
-        <p className="panel-sub">Вы не владелец и не распорядитель, но можете пополнить кошелёк. Тратить деньги будут по тем же правилам.</p>
+        <h2>Қолдау</h2>
+        <p className="panel-sub">Сіз иесі де, жұмсаушы да емессіз, бірақ әмиянды толтыра аласыз. Ақша сол ереже бойынша жұмсалады.</p>
       </div>
       <label className="field">
-        <span>Сумма, ₸</span>
+        <span>Сома, ₸</span>
         <input className="input amount-input" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" />
       </label>
       <Result msg={msg} network={network} />
@@ -724,7 +724,7 @@ function SupportPanel({ deposit: dep, network }: { deposit: (a: NonNullable<Retu
           setBusy(false);
         }}
       >
-        Пополнить
+        Толтыру
       </button>
     </div>
   );

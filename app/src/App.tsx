@@ -1,13 +1,13 @@
 import { BaseWalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 const WALLET_LABELS = {
-  "change-wallet": "Сменить кошелёк",
-  connecting: "Подключаю…",
-  "copy-address": "Скопировать адрес",
-  copied: "Скопировано",
-  disconnect: "Отключить",
-  "has-wallet": "Подключить",
-  "no-wallet": "Подключить",
+  "change-wallet": "Әмиянды ауыстыру",
+  connecting: "Қосылуда…",
+  "copy-address": "Мекенжайды көшіру",
+  copied: "Көшірілді",
+  disconnect: "Ажырату",
+  "has-wallet": "Қосу",
+  "no-wallet": "Қосу",
 } as const;
 import { Logo } from "./components/ui";
 import { useRoute } from "./lib/router";
@@ -25,15 +25,15 @@ function RoleBar() {
   if (!demoWallet() && !demoRole) return null;
   const signers = ROLES.filter((r) => r.canSign);
   return (
-    <div className="rolebar" role="group" aria-label="Демо-роль">
-      <span className="rb-label">Демо: действую как</span>
+    <div className="rolebar" role="group" aria-label="Демо рөлі">
+      <span className="rb-label">Демо: әрекет етуші</span>
       {signers.map((r) => (
         <button key={r.id} aria-pressed={demoRole === r.id} onClick={() => setDemoRole(r.id)}>
           {r.title}
         </button>
       ))}
       <button aria-pressed={demoRole === null} onClick={() => setDemoRole(null)}>
-        Наблюдатель
+        Бақылаушы
       </button>
     </div>
   );
@@ -57,20 +57,20 @@ export default function App() {
           <a className="logo" href="#/">
             <Logo /> Arna
           </a>
-          <nav aria-label="Разделы">
+          <nav aria-label="Бөлімдер">
             <a href="#/demo" aria-current={page === "demo" ? "page" : undefined}>
               Демо
             </a>
             <a href="#/new" aria-current={page === "new" ? "page" : undefined}>
-              Новый кошелёк
+              Жаңа әмиян
             </a>
             <a href="#/mine" aria-current={page === "mine" ? "page" : undefined}>
-              Мои кошельки
+              Менің әмияндарым
             </a>
           </nav>
           <div className="spacer" />
           <label className="sr-only" htmlFor="net" style={{ position: "absolute", left: -9999 }}>
-            Сеть
+            Желі
           </label>
           <select id="net" className="net" value={network} onChange={(e) => setNetwork(e.target.value as NetworkId)}>
             {(Object.keys(NETWORKS) as NetworkId[]).map((n) => (
@@ -86,8 +86,8 @@ export default function App() {
       <main>{view}</main>
       <footer className="foot">
         <div className="wrap">
-          <span>Arna — целевой кошелёк на Solana. Учебный проект курса Solana Builders, AlmaU.</span>
-          <span>Тестовая сеть: настоящие деньги не используются.</span>
+          <span>Arna — Solana-дағы мақсатты әмиян. Solana Builders курсының оқу жобасы, AlmaU.</span>
+          <span>Сынақ желісі: нақты ақша қолданылмайды.</span>
         </div>
       </footer>
     </>

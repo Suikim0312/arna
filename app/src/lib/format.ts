@@ -23,22 +23,20 @@ export function short(addr: string, n = 4) {
   return `${addr.slice(0, n)}…${addr.slice(-n)}`;
 }
 
-const df = new Intl.DateTimeFormat("ru-RU", {
-  day: "numeric",
-  month: "short",
-  hour: "2-digit",
-  minute: "2-digit",
-});
+const MONTHS = ["қаңтар", "ақпан", "наурыз", "сәуір", "мамыр", "маусым", "шілде", "тамыз", "қыркүйек", "қазан", "қараша", "желтоқсан"];
 
 export function when(unix: number) {
-  return df.format(new Date(unix * 1000));
+  const d = new Date(unix * 1000);
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  return `${d.getDate()} ${MONTHS[d.getMonth()]}, ${hh}:${mm}`;
 }
 
 export function periodLabel(seconds: number) {
-  if (!seconds) return "на всё время";
-  if (seconds % 2_592_000 === 0) return seconds === 2_592_000 ? "в месяц" : `за ${seconds / 2_592_000} мес.`;
-  if (seconds % 604_800 === 0) return seconds === 604_800 ? "в неделю" : `за ${seconds / 604_800} нед.`;
-  if (seconds % 86_400 === 0) return seconds === 86_400 ? "в день" : `за ${seconds / 86_400} дн.`;
-  if (seconds % 3600 === 0) return `за ${seconds / 3600} ч`;
-  return `за ${Math.round(seconds / 60)} мин`;
+  if (!seconds) return "тұтас уақытқа";
+  if (seconds % 2_592_000 === 0) return seconds === 2_592_000 ? "айына" : `${seconds / 2_592_000} айға`;
+  if (seconds % 604_800 === 0) return seconds === 604_800 ? "аптасына" : `${seconds / 604_800} аптаға`;
+  if (seconds % 86_400 === 0) return seconds === 86_400 ? "күніне" : `${seconds / 86_400} күнге`;
+  if (seconds % 3600 === 0) return `${seconds / 3600} сағатқа`;
+  return `${Math.round(seconds / 60)} минутқа`;
 }
